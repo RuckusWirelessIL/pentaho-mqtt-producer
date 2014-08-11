@@ -8,7 +8,7 @@ MQTT producer step plug-in for Pentaho Kettle.
 
 ### Screenshots ###
 
-![Using MQTT Client step in Kettle](https://raw.github.com/RuckusWirelessIL/pentaho-mqtt-producer/master/doc/example.png)
+![Using MQTT Client step in Kettle](https://raw.githubusercontent.com/RuckusWirelessIL/pentaho-mqtt-client/master/doc/example.png)
 
 
 ### Installation ###
