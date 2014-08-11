@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-	id="MQTTClient"
+	id="MQTTProducer"
 	iconfile="logo.png"
-	description="MQTT Client"
+	description="MQTT Producer"
 	tooltip="This plug-in allows sending messages via MQTT client"
 	category="Output"
-	classname="com.ruckuswireless.pentaho.mqtt.client.MQTTClientMeta">
+	classname="com.ruckuswireless.pentaho.mqtt.producer.MQTTProducerMeta">
 	
 	<libraries>
-		<library name="pentaho-kafka-producer.jar"/>
-		<library name="lib/activation-1.1.jar"/>
+		<library name="pentaho-mqtt-producer.jar"/>
+		<library name="lib/mqtt-client-0.4.0.jar"/>
 	</libraries>
     
 	<localized_category>
 		<category locale="en_US">Output</category>
 	</localized_category>
 	<localized_description>
-		<description locale="en_US">MQTT Client</description>
+		<description locale="en_US">MQTT Producer</description>
 	</localized_description>
 	<localized_tooltip>
 		<tooltip locale="en_US">This plug-in allows sending messages via MQTT client</tooltip>

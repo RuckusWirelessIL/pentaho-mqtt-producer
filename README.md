@@ -1,19 +1,19 @@
-pentaho-mqtt-client
+pentaho-mqtt-producer
 ======================
 
-MQTT client step plug-in for Pentaho Kettle.
+MQTT producer step plug-in for Pentaho Kettle.
 
-[![Build Status](https://travis-ci.org/RuckusWirelessIL/pentaho-mqtt-client.png)](https://travis-ci.org/RuckusWirelessIL/pentaho-mqtt-client)
+[![Build Status](https://travis-ci.org/RuckusWirelessIL/pentaho-mqtt-producer.png)](https://travis-ci.org/RuckusWirelessIL/pentaho-mqtt-producer)
 
 
 ### Screenshots ###
 
-![Using MQTT Client step in Kettle](https://raw.github.com/RuckusWirelessIL/pentaho-mqtt-client/master/doc/example.png)
+![Using MQTT Client step in Kettle](https://raw.github.com/RuckusWirelessIL/pentaho-mqtt-producer/master/doc/example.png)
 
 
 ### Installation ###
 
-1. Download ```pentaho-mqtt-client``` Zip archive from [latest release page](https://github.com/RuckusWirelessIL/pentaho-mqtt-client/releases/latest).
+1. Download ```pentaho-mqtt-producer``` Zip archive from [latest release page](https://github.com/RuckusWirelessIL/pentaho-mqtt-producer/releases/latest).
 2. Extract downloaded archive into *plugins/steps* directory of your Pentaho Data Integration distribution.
 
 
