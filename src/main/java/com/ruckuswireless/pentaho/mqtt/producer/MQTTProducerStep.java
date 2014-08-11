@@ -29,41 +29,6 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 		super(stepMeta, stepDataInterface, copyNr, transMeta, trans);
 	}
 
-	public boolean init(StepMetaInterface smi, StepDataInterface sdi) {
-		super.init(smi, sdi);
-
-		MQTTProducerMeta meta = (MQTTProducerMeta) smi;
-		MQTTProducerData data = (MQTTProducerData) sdi;
-
-		String broker = environmentSubstitute(meta.getBroker());
-		try {
-			data.client = new MqttClient(broker,
-					environmentSubstitute(meta.getClientId()));
-
-			MqttConnectOptions connectOptions = new MqttConnectOptions();
-			connectOptions.setCleanSession(true);
-
-			String timeout = environmentSubstitute(meta.getTimeout());
-			try {
-				connectOptions.setConnectionTimeout(Integer.parseInt(timeout));
-			} catch (NumberFormatException e) {
-				logError(Messages.getString(
-						"MQTTClientStep.WrongTimeoutValue.Message", timeout), e);
-				return false;
-			}
-
-			logBasic(Messages.getString(
-					"MQTTClientStep.CreateMQTTClient.Message", broker));
-			data.client.connect(connectOptions);
-
-		} catch (MqttException e) {
-			logError(Messages.getString(
-					"MQTTClientStep.ErrorCreateMQTTClient.Message", broker), e);
-			return false;
-		}
-		return true;
-	}
-
 	public void dispose(StepMetaInterface smi, StepDataInterface sdi) {
 		MQTTProducerData data = (MQTTProducerData) sdi;
 		if (data.client != null) {
@@ -97,6 +62,38 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 
 		if (first) {
 			first = false;
+
+			// Initialize MQTT client:
+			if (data.client == null) {
+				String broker = environmentSubstitute(meta.getBroker());
+				try {
+					data.client = new MqttClient(broker,
+							environmentSubstitute(meta.getClientId()));
+
+					MqttConnectOptions connectOptions = new MqttConnectOptions();
+					connectOptions.setCleanSession(true);
+
+					String timeout = environmentSubstitute(meta.getTimeout());
+					try {
+						connectOptions.setConnectionTimeout(Integer
+								.parseInt(timeout));
+					} catch (NumberFormatException e) {
+						throw new KettleException(Messages.getString(
+								"MQTTClientStep.WrongTimeoutValue.Message",
+								timeout), e);
+					}
+
+					logBasic(Messages.getString(
+							"MQTTClientStep.CreateMQTTClient.Message", broker));
+					data.client.connect(connectOptions);
+
+				} catch (MqttException e) {
+					throw new KettleException(Messages.getString(
+							"MQTTClientStep.ErrorCreateMQTTClient.Message",
+							broker), e);
+				}
+			}
+
 			data.outputRowMeta = getInputRowMeta().clone();
 			meta.getFields(data.outputRowMeta, getStepname(), null, null, this);
 
