@@ -67,8 +67,8 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 			if (data.client == null) {
 				String broker = environmentSubstitute(meta.getBroker());
 				try {
-					data.client = new MqttClient(broker,
-							environmentSubstitute(meta.getClientId()));
+					String clientId = environmentSubstitute(meta.getClientId());
+					data.client = new MqttClient(broker, clientId);
 
 					MqttConnectOptions connectOptions = new MqttConnectOptions();
 					connectOptions.setCleanSession(true);
@@ -84,7 +84,8 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 					}
 
 					logBasic(Messages.getString(
-							"MQTTClientStep.CreateMQTTClient.Message", broker));
+							"MQTTClientStep.CreateMQTTClient.Message", broker,
+							clientId));
 					data.client.connect(connectOptions);
 
 				} catch (MqttException e) {
@@ -145,10 +146,10 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 			MqttMessage mqttMessage = new MqttMessage(message);
 			mqttMessage.setQos(qos);
 
+			logBasic(Messages.getString("MQTTClientStep.Log.SendingData",
+					topic, Integer.toString(qos)));
 			if (isRowLevel()) {
-				logRowlevel(Messages.getString(
-						"MQTTClientStep.Log.SendingData", topic,
-						data.inputFieldMeta.getString(r[data.inputFieldNr])));
+				logRowlevel(data.inputFieldMeta.getString(r[data.inputFieldNr]));
 			}
 			try {
 				data.client.publish(topic, mqttMessage);
@@ -179,16 +180,18 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 			throws KettleException {
 
 		MQTTProducerData data = (MQTTProducerData) sdi;
-		try {
-			if (data.client.isConnected()) {
-				data.client.disconnect();
+		if (data.client != null) {
+			try {
+				if (data.client.isConnected()) {
+					data.client.disconnect();
+				}
+				data.client.close();
+				data.client = null;
+			} catch (MqttException e) {
+				logError(
+						Messages.getString("MQTTClientStep.ErrorClosingMQTTClient.Message"),
+						e);
 			}
-			data.client.close();
-			data.client = null;
-		} catch (MqttException e) {
-			logError(
-					Messages.getString("MQTTClientStep.ErrorClosingMQTTClient.Message"),
-					e);
 		}
 		super.stopRunning(smi, sdi);
 	}
