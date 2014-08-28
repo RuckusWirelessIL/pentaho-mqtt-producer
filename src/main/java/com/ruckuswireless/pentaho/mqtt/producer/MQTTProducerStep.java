@@ -71,6 +71,25 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 					data.client = new MqttClient(broker, clientId);
 
 					MqttConnectOptions connectOptions = new MqttConnectOptions();
+					if (meta.isRequiresAuth()) {
+						connectOptions.setUserName(environmentSubstitute(meta
+								.getUsername()));
+						connectOptions.setPassword(environmentSubstitute(
+								meta.getPassword()).toCharArray());
+					}
+					if (broker.startsWith("ssl:")) {
+						connectOptions
+								.setSocketFactory(SSLSocketFactoryGenerator
+										.getSocketFactory(
+												environmentSubstitute(meta
+														.getSSLCaFile()),
+												environmentSubstitute(meta
+														.getSSLCertFile()),
+												environmentSubstitute(meta
+														.getSSLKeyFile()),
+												environmentSubstitute(meta
+														.getSSLKeyFilePass())));
+					}
 					connectOptions.setCleanSession(true);
 
 					String timeout = environmentSubstitute(meta.getTimeout());
@@ -88,7 +107,7 @@ public class MQTTProducerStep extends BaseStep implements StepInterface {
 							clientId));
 					data.client.connect(connectOptions);
 
-				} catch (MqttException e) {
+				} catch (Exception e) {
 					throw new KettleException(Messages.getString(
 							"MQTTClientStep.ErrorCreateMQTTClient.Message",
 							broker), e);

@@ -10,6 +10,8 @@
 	<libraries>
 		<library name="pentaho-mqtt-producer.jar"/>
 		<library name="lib/mqtt-client-0.4.0.jar"/>
+		<library name="lib/bcprov-jdk15on-1.48.jar"/>
+		<library name="lib/bcpkix-jdk15on-1.48.jar"/>
 	</libraries>
     
 	<localized_category>
